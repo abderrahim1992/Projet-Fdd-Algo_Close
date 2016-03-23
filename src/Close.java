@@ -3,21 +3,21 @@ import java.util.ArrayList;
 import java.util.List;
 public class Close {
 
-	private List<ItemRowData> rowsData;
+	private List<ItemID> rowsData;
 	private double support;
 	private List<String> generators;
 	private List<List<String>> items;
 	private List<List<ItemSetRow>> iterationsResults;
 	double itemsSize;// necessaire pour le calcul du support
 	
-	public Close (List<ItemRowData>rows,double support){
+	public Close (List<ItemID>rows,double support){
 		
 		iterationsResults=new ArrayList<List<ItemSetRow>>();
 		this.support=support;
 		this.rowsData=rows;
 		generators=new ArrayList<String>();
 		items=new ArrayList<List<String>>();
-		for(ItemRowData row:rows){
+		for(ItemID row:rows){
 			items.add(row.getItems());
 		}
 		
@@ -34,6 +34,10 @@ public class Close {
 		 */
 		createGenerators( generators);
 		//printGenerators();
+		generators.add("ab");
+		generators.add("ae");
+		generators.add("bc");
+		generators.add("ce");
 		int index=0;
 		List<String>potentialElms=new ArrayList<String>();
 		
@@ -75,9 +79,12 @@ public class Close {
 	if(rowsTemp.size()>0){
 		continu=true;
 	 }
-	// faire les iterations suivantes  
-	 while(k<generators.size() && continu) {
-		 	 rowsTemp=iterationsResults.get(k-1);
+	// faire les iterations suivantes
+	
+	System.err.println(generators.size());
+	
+	 for(int w=0; w<9;w++){
+		 	 //rowsTemp=iterationsResults.get(k-1);
 		 	//List<GeneratorRow> iterationRows=calculateIterations(rowsTemp,k-1);
 		 	//List<GeneratorRow> filtredRows=filterRows(iterationRows,k-1) ;
 		 	List<ItemSetRow> iterationRows=calculateIterations(rowsTemp,k-1);
@@ -98,7 +105,6 @@ public class Close {
 	 */
 	public List<ItemSetRow> calculateIterations(List<ItemSetRow> rows,int k){
 		List<ItemSetRow> rowResult=new ArrayList<ItemSetRow>();
-	    joinGenerators(rowResult,rows,k);
 	    //trouver la premiere fermeture potentielle
 	    List<String>potentialElms;
 	    int indexItem;
@@ -137,43 +143,7 @@ public class Close {
 		return found;
 	}
 
-	public void joinGenerators(List<ItemSetRow> rowResult,List<ItemSetRow> rows,int k){
-		List<String> initialGenerators=new ArrayList<String>();
- 		if(k==1){
- 			//on est a la deuxieme iteration
-			for(ItemSetRow row:rows)	{
-				initialGenerators.add(row.getGenerators().get(0));
-			}
-			List<List<String>>newGen=combineGenerators(initialGenerators);
-			// Enlever les g�n�rateurs existants dans les femr�s d�ja calcul�s
-			boolean contenu =true;
-			for(List<String> liste: newGen ){
-				contenu=false;
-				 for(ItemSetRow row:rows){
-					 if(egale(liste,row.getFermeture())){
-						contenu=true;
-						break;
-					 }
-				 }
-				 if(contenu==false)
-					 rowResult.add(new ItemSetRow(liste));
-			}
- 		}else if(k>1){
- 			//il faut que les k-2 premiers elements se ressemblent
-			int index1=0;
-			for(index1=0;index1<rows.size()-1;index1++){
-				
-				for(int index2=index1+1;index2<rows.size();index2++){
-					if(egaleWithIndex(rows.get(index1).getGenerators(),rows.get(index2).getGenerators(),k-2)){
-						List<String>gens=createGenerator(rows.get(index1).getGenerators(),rows.get(index2).getGenerators(),k-2);
-						rowResult.add(new ItemSetRow(gens));
-					}
-				}
-				
-			}
-			
-		}
-	}
+	
 	
 	public List<String>createGenerator(List<String>list1,List<String>list2,int k){
 		List<String>gens=new ArrayList<String>();
@@ -209,40 +179,6 @@ public class Close {
 		return result;
 	}
 	
-	public boolean egaleWithIndex(List<String>list1,List<String>list2, int endIndex){
- 		boolean result=false;
-		boolean diff=false;
-		for(int i=0;i<=endIndex;i++){
-			diff=false;
-			if(!list1.get(i).equalsIgnoreCase(list2.get(i))){
-				diff=true;
-				break;
-			}
-		}  
-			if(!diff){
-				result=true;
-			}
-		 
-		 
-		return result;
-		
-	}
-	
-	
-public List<List<String>>	combineGenerators(List<String> gens){
-	List<List<String>>result=new ArrayList<List<String>>();
-	
-	for(int i=0;i<gens.size()-1;i++){
-		for(int j=i+1;j<gens.size();j++){
-			List<String>ligneGens=new ArrayList<String>();
-			ligneGens.add(gens.get(i));
-			ligneGens.add(gens.get(j));
-			result.add(ligneGens);
-		}
-	}
-	return  result;
-	
-	}
 	/**
 	 * 
 	 * Filtrer les row dont le support < MinSupport
@@ -377,7 +313,7 @@ public List<List<String>>	combineGenerators(List<String> gens){
 	 * 
 	 */
 	public void createGenerators(List<String> generators){
-		for(ItemRowData row:rowsData){
+		for(ItemID row:rowsData){
 			for(String item:row.getItems()){
 				if(!isInString(generators,item)){
 					generators.add(item);
@@ -509,12 +445,6 @@ public List<List<String>>	combineGenerators(List<String> gens){
 			}
 		}
 		return result;
-	}
-	public void printGenerators() {
-		System.out.println("les generateurs sont:");
-		for(String generator:generators) {
-			System.out.println("generateur: "+ generator);
-		}
 	}
 
 	public List<List<ItemSetRow>> getIterationsResults() {

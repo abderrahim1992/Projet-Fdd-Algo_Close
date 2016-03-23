@@ -72,7 +72,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
     private ViewPanelLeft viewPanelLeft;
     private JFileChooser jFileChooser;
     private String inputFileLocation;
-    private List<ItemRowData>rows ;
+    private List<ItemID>rows ;
 	    
     JButton svtButton;
     JButton prcButton;
@@ -85,7 +85,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		createView();
 		placeComponent();
 		createControler();
-		rows=new ArrayList<ItemRowData>();
+		rows=new ArrayList<ItemID>();
     }
     
     public void Display(){
@@ -195,7 +195,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          	    				 text=text+ligne+"\n";
          	    				 
          	    			       index=0;
-         	    			        ItemRowData row=new ItemRowData();
+         	    			       ItemID row=new ItemID();
          	    			        //supprimer les espaces
          	    			        ligne.replaceAll("\\s+","");
          	    			        //r�cup�rer l'identifiant
@@ -362,14 +362,14 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 			prcButton.setEnabled(false);
 		}
 		if(index<iterationsResults.size()-1){
-			svtButton.setEnabled(true);
+			//svtButton.setEnabled(true);
 		}
 		else{
-			svtButton.setEnabled(false);
+			//svtButton.setEnabled(false);
 		}
 	}
 	
-   public List<ItemRowData> getItemRows(){
+   public List<ItemID> getItemRows(){
 	   return rows;
    }
 	

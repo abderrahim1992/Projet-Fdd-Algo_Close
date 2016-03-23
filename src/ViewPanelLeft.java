@@ -24,8 +24,11 @@ public class ViewPanelLeft extends JTabbedPane {
 	    
 	    private DefaultMutableTreeNode root;
 	   
-	    
-	 public ViewPanelLeft(){
+	public javax.swing.JTree getjTreeFile() {
+		return jTreeFile;
+	}   
+	
+	public ViewPanelLeft(){
     jPanelFile = new javax.swing.JPanel();
     jPanelFile.setBackground(new java.awt.Color(255, 255, 255));
     jPanelFile.setPreferredSize(new java.awt.Dimension(100,1050));
@@ -50,14 +53,8 @@ public class ViewPanelLeft extends JTabbedPane {
 	
 	 }
 
-
-
-	public javax.swing.JTree getjTreeFile() {
-		return jTreeFile;
-	}
-	 
-	 public void fillTree(List<ItemRowData>rows){
-		 for(ItemRowData row:rows){
+	 public void fillTree(List<ItemID>rows){
+		 for(ItemID row:rows){
 			 DefaultMutableTreeNode node=new DefaultMutableTreeNode(row.getIdentifiant());
 			  for(String elm:row.getItems()){
 				  node.add(new DefaultMutableTreeNode(elm));
