@@ -3,21 +3,21 @@ import java.util.ArrayList;
 import java.util.List;
 public class Close {
 
-	private List<ItemID> rowsData;
+	private List<ResultOfItem> rowsData;
 	private double support;
 	private List<String> generators;
 	private List<List<String>> items;
-	private List<List<ItemSetRow>> iterationsResults;
+	private List<List<ResultOfItem>> iterationsResults;
 	double itemsSize;// necessaire pour le calcul du support
 	
-	public Close (List<ItemID>rows,double support){
+	public Close (List<ResultOfItem>rows,double support){
 		
-		iterationsResults=new ArrayList<List<ItemSetRow>>();
+		iterationsResults=new ArrayList<List<ResultOfItem>>();
 		this.support=support;
 		this.rowsData=rows;
 		generators=new ArrayList<String>();
 		items=new ArrayList<List<String>>();
-		for(ItemID row:rows){
+		for(ResultOfItem row:rows){
 			items.add(row.getItems());
 		}
 		
@@ -42,13 +42,13 @@ public class Close {
 		List<String>potentialElms=new ArrayList<String>();
 		
 		//create initial iteration items
-		List<ItemSetRow>rows=new ArrayList<ItemSetRow>();
+		List<ResultOfItem>rows=new ArrayList<ResultOfItem>();
 		
 		for(String generator:generators){
 		index=0;
 		List<String>generatorElm=new ArrayList<String>();
 		generatorElm.add(generator);
-		ItemSetRow row=new ItemSetRow(generatorElm);
+		ResultOfItem row=new ResultOfItem(generatorElm);
 		//Ajout dans la liste des generatorRow (rows)
 		rows.add(row);
 		//find the first row where appears the generator
@@ -61,19 +61,19 @@ public class Close {
 		}
 		
 		//trouver les fermetures et les support de la premiere iteration
- 		trouverFermeture(row,potentialElms,index+1);
+		 trouverFermeture(row,potentialElms,index+1);
 		 calculateSupport(row);
 		 
 	}
 	int k=1;
 	//enelver les iteration dont le support < minSupport 
 	//et dont les fermetures sont deja calculées
-	for(ItemSetRow row:rows){
+	for(ResultOfItem row:rows){
 		row.print();
 	}
-	List<ItemSetRow>newRows=filterRows(rows,-1);
+	List<ResultOfItem>newRows=filterRows(rows,-1);
 	iterationsResults.add(newRows);
-	List<ItemSetRow>rowsTemp;
+	List<ResultOfItem>rowsTemp;
 	rowsTemp=iterationsResults.get(k-1);
 	boolean continu=false;
 	if(rowsTemp.size()>0){
@@ -87,8 +87,8 @@ public class Close {
 		 	 //rowsTemp=iterationsResults.get(k-1);
 		 	//List<GeneratorRow> iterationRows=calculateIterations(rowsTemp,k-1);
 		 	//List<GeneratorRow> filtredRows=filterRows(iterationRows,k-1) ;
-		 	List<ItemSetRow> iterationRows=calculateIterations(rowsTemp,k-1);
-		 	List<ItemSetRow> filtredRows=filterRows(iterationRows,k-1) ;
+		 	List<ResultOfItem> iterationRows=calculateIterations(rowsTemp,k-1);
+		 	List<ResultOfItem> filtredRows=filterRows(iterationRows,k-1) ;
 		 	if(filtredRows.size()>0)
 		 	iterationsResults.add(filtredRows );
 		 	if(filtredRows.size()==0){
@@ -103,8 +103,8 @@ public class Close {
 	 * @param k le numero de l'iteration courante
 	 * @return
 	 */
-	public List<ItemSetRow> calculateIterations(List<ItemSetRow> rows,int k){
-		List<ItemSetRow> rowResult=new ArrayList<ItemSetRow>();
+	public List<ResultOfItem> calculateIterations(List<ResultOfItem> rows,int k){
+		List<ResultOfItem> rowResult=new ArrayList<ResultOfItem>();
 	    //trouver la premiere fermeture potentielle
 	    List<String>potentialElms;
 	    int indexItem;
@@ -185,13 +185,13 @@ public class Close {
 	 * 
 	 */
 	
-	public List<ItemSetRow> filterRows(List<ItemSetRow>  rows,int k){
+	public List<ResultOfItem> filterRows(List<ResultOfItem>  rows,int k){
 		
-		List<ItemSetRow>result=new ArrayList<ItemSetRow>();
+		List<ResultOfItem>result=new ArrayList<ResultOfItem>();
 		boolean add;
 		
 		boolean contenu =false;
-		for(ItemSetRow row:rows){
+		for(ResultOfItem row:rows){
 			add=true;
 			
 			if(row.getSupport()<support){
@@ -202,7 +202,7 @@ public class Close {
 				add=false;
 			}
 			if(k>=0){
-			for(ItemSetRow rowP:iterationsResults.get(k)){
+			for(ResultOfItem rowP:iterationsResults.get(k)){
 				contenu=false;
 				 if(egale(row.getFermeture(),rowP.getFermeture())){
 					contenu=true;
@@ -237,9 +237,9 @@ public class Close {
 	 * @param rows
 	 * @return
 	 */
-	public List<ItemSetRow> calculateRegles(List<ItemSetRow> rows){
+	public List<ResultOfItem> calculateRegles(List<ResultOfItem> rows){
 		String regle="";
-		for(ItemSetRow row:rows){
+		for(ResultOfItem row:rows){
 			regle="";
 			for(String generateur:row.getGenerators()){
 				regle+=generateur;
@@ -268,7 +268,7 @@ public class Close {
 	 * @param index
 	 * @return GeneratorRow
 	 */
-	private ItemSetRow trouverFermeture(ItemSetRow row,List<String> potentialElms, int index) {  
+	private ResultOfItem trouverFermeture(ResultOfItem row,List<String> potentialElms, int index) {  
 		if(index>=items.size()){
 			row.setFermeture(potentialElms);
 			return row;
@@ -294,7 +294,7 @@ public class Close {
 		
 	}
 	
-	public List<String>findClose(List<String>str1, List<String>str2,ItemSetRow row){
+	public List<String>findClose(List<String>str1, List<String>str2,ResultOfItem row){
 		//double supportToAdd;
 		List<String>result=new ArrayList<String>();
 		for(String elmt:str1){
@@ -313,7 +313,7 @@ public class Close {
 	 * 
 	 */
 	public void createGenerators(List<String> generators){
-		for(ItemID row:rowsData){
+		for(ResultOfItem row:rowsData){
 			for(String item:row.getItems()){
 				if(!isInString(generators,item)){
 					generators.add(item);
@@ -330,7 +330,7 @@ public class Close {
 	 * @param row
 	 */
 	
-	public void calculateSupport(ItemSetRow row){
+	public void calculateSupport(ResultOfItem row){
  		double supportToAdd=0;
 		boolean contenu;
 		if(row.getFermeture().size()>0)
@@ -383,8 +383,8 @@ public class Close {
 	 *  
 	 * @param rows
 	 */
-	public void calculateLift(List<ItemSetRow>  rows){
-		for(ItemSetRow row:rows){
+	public void calculateLift(List<ResultOfItem>  rows){
+		for(ResultOfItem row:rows){
  			
 		
 		
@@ -398,7 +398,7 @@ public class Close {
 	 		if(tabRegle[1]!=null && !tabRegle[1].isEmpty()){
 	 			
 	 			String regleDroite=tabRegle[1];
-	 			ItemSetRow rowRightProduction;
+	 			ResultOfItem rowRightProduction;
 	 			
 	 			boolean egalite=false;
 	 			for(int i=0;i<rows.size();i++){
@@ -447,11 +447,11 @@ public class Close {
 		return result;
 	}
 
-	public List<List<ItemSetRow>> getIterationsResults() {
+	public List<List<ResultOfItem>> getIterationsResults() {
 		return iterationsResults;
 	}
 
-	public void setIterationsResults(List<List<ItemSetRow>> iterationsResults) {
+	public void setIterationsResults(List<List<ResultOfItem>> iterationsResults) {
 		this.iterationsResults = iterationsResults;
 	}
 }

@@ -72,12 +72,12 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
     private ViewPanelLeft viewPanelLeft;
     private JFileChooser jFileChooser;
     private String inputFileLocation;
-    private List<ItemID>rows ;
+    private List<ResultOfItem> rows ;
 	    
     JButton svtButton;
     JButton prcButton;
     
-    private List<List<ItemSetRow>>iterationsResults;
+    private List<List<ResultOfItem>>iterationsResults;
     int index;
 	    
 	    
@@ -85,7 +85,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		createView();
 		placeComponent();
 		createControler();
-		rows=new ArrayList<ItemID>();
+		rows=new ArrayList<ResultOfItem>();
     }
     
     public void Display(){
@@ -95,7 +95,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 	
 	public void createView(){
 		loadFile =new JButton("loadFile");
-		iterationsResults=new ArrayList<List<ItemSetRow>>();
+		iterationsResults=new ArrayList<List<ResultOfItem>>();
 		jTabbedDataPane = new JTabbedPane();//for data editor
 		jPanel5 = new JPanel(); // data editor panel
 		jScrollPane1 = new JScrollPane();
@@ -195,7 +195,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          	    				 text=text+ligne+"\n";
          	    				 
          	    			       index=0;
-         	    			       ItemID row=new ItemID();
+         	    			       ResultOfItem row=new ResultOfItem();
          	    			        //supprimer les espaces
          	    			        ligne.replaceAll("\\s+","");
          	    			        //r�cup�rer l'identifiant
@@ -223,7 +223,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          	    			        		index++;
          	    			        	}
          	    			        	 
-         	    			        	 row.getItems().add(item);
+         	    			        	row.getItems().add(item);
          	    			        	index++;
          	    			        }
          	    			       rows.add(row);
@@ -330,11 +330,11 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		ViewResult.textArea1Rer = textArea1Rer;
 	} 
 	
-	public List<List<ItemSetRow>> getIterationsResults() {
+	public List<List<ResultOfItem>> getIterationsResults() {
 		return iterationsResults;
 	}
 
-	public void setIterationsResults(List<List<ItemSetRow>> iterationsResults) {
+	public void setIterationsResults(List<List<ResultOfItem>> iterationsResults) {
 		this.iterationsResults = iterationsResults;
 	}
 
@@ -342,12 +342,12 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 	
 	int j=modelTable.getRowCount();
 	Vector vec=modelTable.getDataVector();
-	vec.clear();
- 
-		
-		
+	vec.clear(); 
+	
+	
+	
 		if(index>=0 && index <iterationsResults.size()){
-		for(ItemSetRow row:iterationsResults.get(index)){
+		for(ResultOfItem row:iterationsResults.get(index)){
 			row.print();
 			modelTable.addRow(new Object[]{row.getGenerators().toString(),row.getFermeture().toString(),String.valueOf(row.getSupport()),row.getRegle(),"1",row.getLift()});
 			
@@ -369,7 +369,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		}
 	}
 	
-   public List<ItemID> getItemRows(){
+   public List<ResultOfItem> getItemRows(){
 	   return rows;
    }
 	
@@ -384,12 +384,12 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		       content+="************* The result of Close Algorithm ************";
 		       content+="\n \n \n \n";
 		       
-		       for(List<ItemSetRow> row:iterationsResults){
+		       for(List<ResultOfItem> row:iterationsResults){
 		    	     content+="***************************************************\n";
 		    	   content+="Les resultat de l'iteration "+k+"\n";
 		    	     content+="***************************************************\n";
 		    	     content+="\n";
-		    	   for(ItemSetRow elm:row){
+		    	   for(ResultOfItem elm:row){
 		    		   for(String generator :elm.getGenerators()){
 		    			   content+=generator;
 		    			}
