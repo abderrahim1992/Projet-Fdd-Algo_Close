@@ -68,7 +68,10 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
     private double seuil=0.0;
 	private JTable jTable1;
     private DefaultTableModel modelTable ;
-    private TitledBorder title;
+    private TitledBorder contenue;
+    private TitledBorder resultats;
+    private TitledBorder outils;
+    private TitledBorder sauvegarde;
     private JButton loadFile;
     private ViewPanelLeft viewPanelLeft;
     private JFileChooser jFileChooser;
@@ -106,9 +109,9 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		jScrollPane1 = new JScrollPane();
 		contenuFichier = new JTextArea();
 	    
-         start = new JButton("start Close");//submit button
+         start = new JButton("executer l'algorithme close");//submit button
          //jButton2 = new javax.swing.JButton();//clear button
-         save = new JButton("save Result");
+         save = new JButton("Eregistrer les résultats ");
          nameFile= new JTextField(20);
 	     jTabbedPaneResult = new JTabbedPane();
 	     jScrollPane2 = new JScrollPane();
@@ -139,7 +142,10 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          jTable1.getColumnModel().getColumn(3).setPreferredWidth(400);
          jTable1.setBackground(Color.cyan);
          jScrollPane2.setViewportView(jTable1);
-         title = BorderFactory.createTitledBorder("content File");
+         contenue = BorderFactory.createTitledBorder("Contenue du fichier de test");
+         resultats = BorderFactory.createTitledBorder("Résultats aprés execution de Close");
+         outils = BorderFactory.createTitledBorder("outils");
+         sauvegarde = BorderFactory.createTitledBorder("sauvegarde");
 	}
 	
 	
@@ -155,22 +161,30 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 				p.add(z , BorderLayout.NORTH);
 				p.add(jScrollPane1 , BorderLayout.CENTER);
 				prcButton = new JButton("<<");
-		         prcButton.setEnabled(false);
+		        prcButton.setEnabled(false);
 			}
-			p.setBorder(title);
+			p.setBorder(contenue);
+			jScrollPane2.setBorder(resultats);
 			
 			JPanel q=new JPanel();{
-				q.add(start);
-				q.add(save);
-				q.add(new JLabel("nom du fichier"));
-				q.add(nameFile);
-				q.add(save);
-				q.add(new JLabel("support"));
+				q.add(new JLabel("Seuil : "));
 				q.add(fixedSeuil);
+				q.add(new JLabel(" "));
+				q.add(new JLabel(" "));
+				q.add(start);
 			}
 			
+			q.setBorder(outils);
+			JPanel r=new JPanel();{
+				r.add(new JLabel("nom du fichier"));
+				r.add(nameFile);
+				r.add(save);
+			}
+			
+			r.setBorder(sauvegarde);
 	        panD     = new JPanel (new BorderLayout());
 	        panD.add(q , BorderLayout.NORTH);
+	        panD.add(r , BorderLayout.SOUTH);
 	        panD.add(jScrollPane2 , BorderLayout.CENTER);
 			setDividerLocation(351);
 			setDividerSize(2);
