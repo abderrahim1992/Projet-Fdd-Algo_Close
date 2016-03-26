@@ -1,6 +1,8 @@
+
+
 /**
  * 
- * Authors: Mohamed Ibrihen & Abderrahim Si ziani
+ * Authors: Kheireddine Berkane et Amazigh Amrane
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -8,28 +10,20 @@ import java.util.List;
 public class ResultOfItem {
 
 	
-	private String id;
-	private List<String> items;
 	private List<String>generateurs;
-	private double support;
 	private List<String>fermeture;
+	private double support;
 	private String regle;
 	private double lift;
+	private String id;
+	private List<String> items;
 	
-	
-	
-	/**
-	 * contructeur pour initaliser la liste des items
-	 */
-	
+
 	public ResultOfItem() {
 		items=new ArrayList<String>();
 	}
 
 	
-	/**
-	 * contructeur pour initaliser la liste des generateur  et des fermeteures 
-	 */
 	public ResultOfItem(List<String> generateurs) {
 		support=0;
 		this.generateurs = generateurs;
@@ -80,7 +74,7 @@ public class ResultOfItem {
 	}
 
 
-	public void setGenerateurs(List<String> generateurs) {
+	public void setgenerateurs(List<String> generateurs) {
 		this.generateurs = generateurs;
 	}
 
@@ -117,9 +111,9 @@ public class ResultOfItem {
 
 
 	public void print(){
-		System.out.println("*********nouveaux Generateurs ***************** " );
-		for(String generateur :generateurs){
-		System.out.println(generateur);
+		System.out.println("*********new Generator row***************** " );
+		for(String generator :generateurs){
+		System.out.println(generator);
 	}
 		System.out.println("fermetures ");
 		for(String str:fermeture){
