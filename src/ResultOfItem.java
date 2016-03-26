@@ -1,8 +1,6 @@
-
-
 /**
  * 
- * Authors: Kheireddine Berkane et Amazigh Amrane
+ * Authors: Mohamed Ibrihen & Abderrahim Si ziani
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -10,42 +8,50 @@ import java.util.List;
 public class ResultOfItem {
 
 	
-	private List<String>generators;
-	private List<String>fermeture;
+	private String id;
+	private List<String> items;
+	private List<String>generateurs;
 	private double support;
+	private List<String>fermeture;
 	private String regle;
 	private double lift;
-	private String identifiant;
-	private List<String> items;
 	
-
+	
+	
+	/**
+	 * contructeur pour initaliser la liste des items
+	 */
+	
 	public ResultOfItem() {
 		items=new ArrayList<String>();
 	}
 
 	
-	public ResultOfItem(List<String> generators) {
+	/**
+	 * contructeur pour initaliser la liste des generateur  et des fermeteures 
+	 */
+	public ResultOfItem(List<String> generateurs) {
 		support=0;
-		this.generators = generators;
+		this.generateurs = generateurs;
 		fermeture=new ArrayList<String>();
 		items=new ArrayList<String>();
 	}
 
 
-	public ResultOfItem(List<String>generators,List<String>fermeture,double support){
+	public ResultOfItem(List<String>generateurs,List<String>fermeture,double support){
 		
-		this.generators=generators;
+		this.generateurs=generateurs;
 		this.fermeture=fermeture;
 		this.support=support;
 	}
 
-	public String getIdentifiant() {
-		return identifiant;
+	public String getId() {
+		return id;
 	}
 
 
-	public void setIdentifiant(String identifiant) {
-		this.identifiant = identifiant;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 
@@ -69,13 +75,13 @@ public class ResultOfItem {
 	}
 
 
-	public List<String> getGenerators() {
-		return generators;
+	public List<String> getGenerateurs() {
+		return generateurs;
 	}
 
 
-	public void setGenerators(List<String> generators) {
-		this.generators = generators;
+	public void setGenerateurs(List<String> generateurs) {
+		this.generateurs = generateurs;
 	}
 
 
@@ -111,9 +117,9 @@ public class ResultOfItem {
 
 
 	public void print(){
-		System.out.println("*********new Generator row***************** " );
-		for(String generator :generators){
-		System.out.println(generator);
+		System.out.println("*********nouveaux Generateurs ***************** " );
+		for(String generateur :generateurs){
+		System.out.println(generateur);
 	}
 		System.out.println("fermetures ");
 		for(String str:fermeture){

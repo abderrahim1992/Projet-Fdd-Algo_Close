@@ -110,7 +110,7 @@ public class Close {
 	    int indexItem;
 	    for(int indexRow=0;indexRow<rowResult.size();indexRow++ ){
 	    	potentialElms=new ArrayList<String>();
-	    	List<String>generators=	rowResult.get(indexRow).getGenerators();
+	    	List<String>generators=	rowResult.get(indexRow).getGenerateurs();
 	        for(indexItem=0;indexItem<items.size();indexItem++){
 	        	 List<String> setItem=items.get(indexItem);	        	  
 	        	 if(existe(setItem,generators)){
@@ -241,12 +241,12 @@ public class Close {
 		String regle="";
 		for(ResultOfItem row:rows){
 			regle="";
-			for(String generateur:row.getGenerators()){
+			for(String generateur:row.getGenerateurs()){
 				regle+=generateur;
 			}
 			regle+="->";
 			for(String ferm:row.getFermeture()){
-				if(!isInString(row.getGenerators(),ferm)){
+				if(!isInString(row.getGenerateurs(),ferm)){
 					regle+=ferm;
 				}
 			}
@@ -275,7 +275,7 @@ public class Close {
 		}
 		else{
 			boolean contenu=true;
-			for(String generator:row.getGenerators()){
+			for(String generator:row.getGenerateurs()){
 				if(!isInString(items.get(index),generator)){
 					contenu=false;
 					break;
@@ -404,8 +404,8 @@ public class Close {
 	 			for(int i=0;i<rows.size();i++){
 	 					
 	 					rowRightProduction =rows.get(i);
-	 					if(rowRightProduction.getGenerators().size()==regleDroite.length()){
-	 						List<String> gen=rowRightProduction.getGenerators();
+	 					if(rowRightProduction.getGenerateurs().size()==regleDroite.length()){
+	 						List<String> gen=rowRightProduction.getGenerateurs();
 	 						egalite=ExistGeneratorRightProduction(regleDroite,gen);
 	 						 if(egalite){
 	 							

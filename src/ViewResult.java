@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.Toolkit;
@@ -93,6 +94,10 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
     	closeFrame.setLocation(null);
     }
 	
+    
+    /** 
+     * creation de la vue
+     * */
 	public void createView(){
 		loadFile =new JButton("loadFile");
 		iterationsResults=new ArrayList<List<ResultOfItem>>();
@@ -117,39 +122,44 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          double seuilSupport = 0.0;                                                                  
          SpinnerModel model = new SpinnerNumberModel(seuilSupport, seuilSupport- 0, seuilSupport + 1,0.100000000000000000);    
          model.addChangeListener(this);
-         fixedSeuil = new JSpinner(model);
-	         
+         fixedSeuil = new JSpinner(model); 
 	         
          jTable1 = new JTable();
-         jTable1.setSize(WIDTH, 600);
+         jTable1.setSize(WIDTH, 800);
          modelTable = new DefaultTableModel();
          modelTable.addColumn("Générateurs");
          modelTable.addColumn("Fermeture");
          modelTable.addColumn("Support");
          modelTable.addColumn("Régle");
-         modelTable.addColumn("Confiance");
          modelTable.addColumn("Lift");
           //La table dans laquelle seront affich�es les ligens r�sultats
          jTable1.setModel(modelTable);
-
-         jTable1.setBackground(Color.LIGHT_GRAY);
-         //jTable1.add(dataPane);
+         jTable1.getColumnModel().getColumn(0).setPreferredWidth(150);
+         jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
+         jTable1.getColumnModel().getColumn(3).setPreferredWidth(400);
+         jTable1.setBackground(Color.cyan);
          jScrollPane2.setViewportView(jTable1);
-
-         prcButton = new JButton("<<");
-         prcButton.setEnabled(false);
          title = BorderFactory.createTitledBorder("content File");
-
 	}
 	
+	
+	/**
+	 *disposition des panels 
+	 */
 	public void placeComponent(){
-			JPanel p=new JPanel();{
+			JPanel p=new JPanel(new BorderLayout());{
 				
-				p.add(jScrollPane1);
-				p.add(loadFile);
+				JPanel z=new JPanel();{
+					z.add(loadFile );
+				}
+				p.add(z , BorderLayout.NORTH);
+				p.add(jScrollPane1 , BorderLayout.CENTER);
+				prcButton = new JButton("<<");
+		         prcButton.setEnabled(false);
 			}
 			p.setBorder(title);
-			JPanel q=new JPanel(new GridLayout(1,6));{
+			
+			JPanel q=new JPanel();{
 				q.add(start);
 				q.add(save);
 				q.add(new JLabel("nom du fichier"));
@@ -157,26 +167,22 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 				q.add(save);
 				q.add(new JLabel("support"));
 				q.add(fixedSeuil);
-				
-				
-			}
-
-			JPanel w=new JPanel();{
-				w.add(jScrollPane2);
 			}
 			
-	        panD     = new JPanel ();
-	        panD.setLayout((new BoxLayout(panD, BoxLayout.Y_AXIS) ));   
-	        panD.add(q);
-	        panD.add(w);
+	        panD     = new JPanel (new BorderLayout());
+	        panD.add(q , BorderLayout.NORTH);
+	        panD.add(jScrollPane2 , BorderLayout.CENTER);
 			setDividerLocation(351);
-			setDividerSize(4);
-			setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+			setDividerSize(2);
 			setTopComponent(p);
 			setRightComponent(panD);
 		
 	}
 	
+	
+	/** 
+	 * controlleurs
+	 * */
 	public void createControler(){	
 		
 		jFileChooser= new JFileChooser() ;
@@ -206,7 +212,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          	    			        	index++;
          	    			         
          	    			        }
-         	    			        row.setIdentifiant(identifiant);
+         	    			        row.setId(identifiant);
          	    			        
          	    			        
          	    			         //inss�rer les items
@@ -349,7 +355,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		if(index>=0 && index <iterationsResults.size()){
 		for(ResultOfItem row:iterationsResults.get(index)){
 			row.print();
-			modelTable.addRow(new Object[]{row.getGenerators().toString(),row.getFermeture().toString(),String.valueOf(row.getSupport()),row.getRegle(),"1",row.getLift()});
+			modelTable.addRow(new Object[]{row.getGenerateurs().toString(),row.getFermeture().toString(),String.valueOf(row.getSupport()),row.getRegle(),"1",row.getLift()});
 			
 		}
 		
@@ -390,7 +396,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		    	     content+="***************************************************\n";
 		    	     content+="\n";
 		    	   for(ResultOfItem elm:row){
-		    		   for(String generator :elm.getGenerators()){
+		    		   for(String generator :elm.getGenerateurs()){
 		    			   content+=generator;
 		    			}
 		    		  content+="|   ";
