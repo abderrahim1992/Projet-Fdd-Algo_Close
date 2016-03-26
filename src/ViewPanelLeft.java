@@ -53,8 +53,8 @@ public class ViewPanelLeft extends JTabbedPane {
 	
 	 }
 
-	 public void fillTree(List<ItemID>rows){
-		 for(ItemID row:rows){
+	 public void fillTree(List<ResultOfItem> rows){
+		 for(ResultOfItem row:rows){
 			 DefaultMutableTreeNode node=new DefaultMutableTreeNode(row.getIdentifiant());
 			  for(String elm:row.getItems()){
 				  node.add(new DefaultMutableTreeNode(elm));

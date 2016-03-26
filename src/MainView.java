@@ -107,7 +107,7 @@ public class MainView  implements TreeSelectionListener{
 	    
 	    public void launchAlgorithm(){
 	    			
-	    			List<ItemID> rows= mainAreaPane.getItemRows();
+	    			List<ResultOfItem> rows= mainAreaPane.getItemRows();
 			    	Close CLoseAlgo=new Close(rows,this.mainAreaPane.getSeuil());
 			    	CLoseAlgo.launchAlgorithm();
 			    	mainAreaPane.setIterationsResults(CLoseAlgo.getIterationsResults());
