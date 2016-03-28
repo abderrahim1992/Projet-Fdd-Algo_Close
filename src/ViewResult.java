@@ -95,15 +95,15 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
      * creation de la vue
      * */
 	public void createView(){
-		loadFile =new JButton("loadFile");
+		loadFile =new JButton("Ouvrir un fichier");
 		iterationsResults=new ArrayList<List<ResultOfItem>>();
 		tablePane = new JTabbedPane();
 		JPanel panel = new JPanel(); 
 		scorlFilePanel = new JScrollPane();
 		contenufileSave = new JTextArea();
 	    
-         start = new JButton("executer l'algorithme close");
-         save = new JButton("Eregistrer les résultats ");
+         start = new JButton("Executer l'algorithme close");
+         save = new JButton("Eregistrer les résultats");
          nameFile= new JTextField(20);
 	     resyltTabePane = new JTabbedPane();
 	     scorllPaneTable = new JScrollPane();
@@ -140,7 +140,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          contenue = BorderFactory.createTitledBorder("Contenue du fileSave de test");
          resultats = BorderFactory.createTitledBorder("Résultats aprés execution de Close");
          outils = BorderFactory.createTitledBorder("outils");
-         sauvegarde = BorderFactory.createTitledBorder("sauvegarde");
+         sauvegarde = BorderFactory.createTitledBorder("Sauvegarde");
 	}
 	
 	
@@ -169,7 +169,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 			
 			q.setBorder(outils);
 			JPanel r=new JPanel();{
-				r.add(new JLabel("nom du fichier :"));
+				r.add(new JLabel("Nom du fichier :"));
 				r.add(nameFile);
 				r.add(save);
 			}
