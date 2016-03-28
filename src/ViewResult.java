@@ -1,6 +1,6 @@
 /**
  * 
- * Authors: Kheireddine Berkane et Amazigh Amrane
+ * Authors: Abderrahim Si zinai et Mohamed Ibrihen
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -47,49 +47,40 @@ import javax.swing.table.DefaultTableModel;
 
 public class ViewResult extends JSplitPane   implements ChangeListener{
 	private JFrame closeFrame;
-	private javax.swing.JMenu FileMenu;
-    private javax.swing.JMenuItem openFItem;
-    private javax.swing.JMenuItem  Quitter;
-	private   JPanel  panD ;
-    private javax.swing.JPanel dataPane;
-    private javax.swing.JTabbedPane jTabbedDataPane;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private JTextArea contenuFichier;
-    private javax.swing.JButton start;
-    private javax.swing.JButton save;
-    private javax.swing.JTextField nameFile ;
-    private javax.swing.JPanel resultsPanel;
-    private javax.swing.JTabbedPane jTabbedPaneResult;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel jPanelRer ; 
-    private static TextArea textArea1Rer;
+    private JPanel dataPane;
+    private JTabbedPane tablePane;
+    private JScrollPane scorlFilePanel;
+    private JTextArea contenufileSave;
+    private JButton start;
+    private JButton save;
+    private JTextField nameFile ;
+    private JPanel resultsPanel;
+    private JTabbedPane resyltTabePane;
+    private JScrollPane scorllPaneTable; 
+    private static TextArea filecahine;
     private  JSpinner fixedSeuil;
     private double seuil=0.0;
-	private JTable jTable1;
+	private JTable table;
     private DefaultTableModel modelTable ;
     private TitledBorder contenue;
     private TitledBorder resultats;
     private TitledBorder outils;
     private TitledBorder sauvegarde;
     private JButton loadFile;
-    private ViewPanelLeft viewPanelLeft;
-    private JFileChooser jFileChooser;
+    private PanelGauche PanelGauche;
+    private JFileChooser fileChooser;
     private String inputFileLocation;
-    private List<ResultOfItem> rows ;
-	    
-    JButton svtButton;
-    JButton prcButton;
-    
+    private List<ResultOfItem> resultItem ;
     private List<List<ResultOfItem>>iterationsResults;
-    int index;
-	    
+    int i;
+//	JButton prcButton;
+//	JButton svtButton;
 	    
     public ViewResult(){
 		createView();
 		placeComponent();
 		createControler();
-		rows=new ArrayList<ResultOfItem>();
+		resultItem=new ArrayList<ResultOfItem>();
     }
     
     public void Display(){
@@ -104,45 +95,44 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 	public void createView(){
 		loadFile =new JButton("loadFile");
 		iterationsResults=new ArrayList<List<ResultOfItem>>();
-		jTabbedDataPane = new JTabbedPane();//for data editor
-		jPanel5 = new JPanel(); // data editor panel
-		jScrollPane1 = new JScrollPane();
-		contenuFichier = new JTextArea();
+		tablePane = new JTabbedPane();
+		JPanel panel = new JPanel(); 
+		scorlFilePanel = new JScrollPane();
+		contenufileSave = new JTextArea();
 	    
-         start = new JButton("executer l'algorithme close");//submit button
-         //jButton2 = new javax.swing.JButton();//clear button
+         start = new JButton("executer l'algorithme close");
          save = new JButton("Eregistrer les résultats ");
          nameFile= new JTextField(20);
-	     jTabbedPaneResult = new JTabbedPane();
-	     jScrollPane2 = new JScrollPane();
+	     resyltTabePane = new JTabbedPane();
+	     scorllPaneTable = new JScrollPane();
 
-	     textArea1Rer = new TextArea();
-	     contenuFichier.setColumns(20);
-	     contenuFichier.setRows(5);
-	     jScrollPane1.setViewportView(contenuFichier);
-	     jScrollPane2.setViewportView(jTable1);
-	      //add spinner for "le min support"
+	     filecahine = new TextArea();
+	     contenufileSave.setColumns(20);
+	     contenufileSave.setRows(5);
+	     scorlFilePanel.setViewportView(contenufileSave);
+	     scorllPaneTable.setViewportView(table);
+	  
          double seuilSupport = 0.0;                                                                  
          SpinnerModel model = new SpinnerNumberModel(seuilSupport, seuilSupport- 0, seuilSupport + 1,0.100000000000000000);    
          model.addChangeListener(this);
          fixedSeuil = new JSpinner(model); 
 	         
-         jTable1 = new JTable();
-         jTable1.setSize(WIDTH, 800);
+         table = new JTable();
+         table.setSize(WIDTH, 800);
          modelTable = new DefaultTableModel();
          modelTable.addColumn("Générateurs");
          modelTable.addColumn("Fermeture");
          modelTable.addColumn("Support");
          modelTable.addColumn("Régle");
          modelTable.addColumn("Lift");
-          //La table dans laquelle seront affich�es les ligens r�sultats
-         jTable1.setModel(modelTable);
-         jTable1.getColumnModel().getColumn(0).setPreferredWidth(150);
-         jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
-         jTable1.getColumnModel().getColumn(3).setPreferredWidth(400);
-         jTable1.setBackground(Color.cyan);
-         jScrollPane2.setViewportView(jTable1);
-         contenue = BorderFactory.createTitledBorder("Contenue du fichier de test");
+         
+         table.setModel(modelTable);
+         table.getColumnModel().getColumn(0).setPreferredWidth(150);
+         table.getColumnModel().getColumn(1).setPreferredWidth(150);
+         table.getColumnModel().getColumn(3).setPreferredWidth(400);
+         table.setBackground(Color.cyan);
+         scorllPaneTable.setViewportView(table);
+         contenue = BorderFactory.createTitledBorder("Contenue du fileSave de test");
          resultats = BorderFactory.createTitledBorder("Résultats aprés execution de Close");
          outils = BorderFactory.createTitledBorder("outils");
          sauvegarde = BorderFactory.createTitledBorder("sauvegarde");
@@ -159,12 +149,10 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 					z.add(loadFile );
 				}
 				p.add(z , BorderLayout.NORTH);
-				p.add(jScrollPane1 , BorderLayout.CENTER);
-				prcButton = new JButton("<<");
-		        prcButton.setEnabled(false);
+				p.add(scorlFilePanel , BorderLayout.CENTER);
 			}
 			p.setBorder(contenue);
-			jScrollPane2.setBorder(resultats);
+			scorllPaneTable.setBorder(resultats);
 			
 			JPanel q=new JPanel();{
 				q.add(new JLabel("Seuil : "));
@@ -176,20 +164,20 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 			
 			q.setBorder(outils);
 			JPanel r=new JPanel();{
-				r.add(new JLabel("nom du fichier"));
+				r.add(new JLabel("nom du fichier :"));
 				r.add(nameFile);
 				r.add(save);
 			}
 			
 			r.setBorder(sauvegarde);
-	        panD     = new JPanel (new BorderLayout());
-	        panD.add(q , BorderLayout.NORTH);
-	        panD.add(r , BorderLayout.SOUTH);
-	        panD.add(jScrollPane2 , BorderLayout.CENTER);
+	        JPanel base     = new JPanel (new BorderLayout());
+	        base.add(q , BorderLayout.NORTH);
+	        base.add(r , BorderLayout.SOUTH);
+	        base.add(scorllPaneTable , BorderLayout.CENTER);
 			setDividerLocation(351);
 			setDividerSize(2);
 			setTopComponent(p);
-			setRightComponent(panD);
+			setRightComponent(base);
 		
 	}
 	
@@ -199,14 +187,14 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 	 * */
 	public void createControler(){	
 		
-		jFileChooser= new JFileChooser() ;
+		fileChooser= new JFileChooser() ;
         loadFile.addActionListener(new java.awt.event.ActionListener() {
              public void actionPerformed(java.awt.event.ActionEvent evt) {
                  try {
-                	 int dd=jFileChooser.showOpenDialog(viewPanelLeft.getjTreeFile());
+                	 int dd=fileChooser.showOpenDialog(PanelGauche.getTree());
          	    	if(dd == JFileChooser.APPROVE_OPTION){
-         			 inputFileLocation= jFileChooser.getSelectedFile().toString();
-                     int index;
+         			 inputFileLocation= fileChooser.getSelectedFile().toString();
+                     int i;
                      String text="";
          	    	 List<String> lignes =  Files.readAllLines( 
          	    			   
@@ -214,53 +202,46 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          	    			 for (String ligne : lignes){
          	    				 text=text+ligne+"\n";
          	    				 
-         	    			       index=0;
+         	    			       i=0;
          	    			       ResultOfItem row=new ResultOfItem();
-         	    			        //supprimer les espaces
-         	    			        ligne.replaceAll("\\s+","");
-         	    			        //r�cup�rer l'identifiant
-         	    			        String identifiant="";
+         	    			       ligne.replaceAll("\\s+","");
+         	    			       String identifiant="";
          	    			         
-         	    			        while(!(ligne.charAt(index)=='|')&& index<ligne.length()){
-         	    			        	identifiant=identifiant+=ligne.charAt(index);
-         	    			        	index++;
+         	    			        while(!(ligne.charAt(i)=='|')&& i<ligne.length()){
+         	    			        	identifiant=identifiant+=ligne.charAt(i);
+         	    			        	i++;
          	    			         
          	    			        }
          	    			        row.setId(identifiant);
-         	    			        
-         	    			        
-         	    			         //inss�rer les items
          	    			        String item;
-         	    			        //depasser le "|"
-         	    			        index++;
+         	    			        i++;
          	    			      
-         	    			       while(index<ligne.length()){
+         	    			       while(i<ligne.length()){
          	    			        	 item="";
-         	    			        	while(index<ligne.length()&&!(ligne.charAt(index)=='|')){
+         	    			        	while(i<ligne.length()&&!(ligne.charAt(i)=='|')){
          	    			        		
-         	    			        		item=item+ligne.charAt(index);
+         	    			        		item=item+ligne.charAt(i);
          	    			        		 
-         	    			        		index++;
+         	    			        		i++;
          	    			        	}
          	    			        	 
          	    			        	row.getItems().add(item);
-         	    			        	index++;
+         	    			        	i++;
          	    			        }
-         	    			       rows.add(row);
+         	    			       resultItem.add(row);
          	    			 
          	    			 }
-         	    			   getjTextArea1().setText(text);
-         	    			   viewPanelLeft.fillTree(rows)  ; 
+         	    			   getTextArea().setText(text);
+         	    			   PanelGauche.construireTree(resultItem)  ; 
          	    			
          		     }
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				} catch (IOException e){
 					e.printStackTrace();
 				}
               }
          });
     	 
-        viewPanelLeft = new ViewPanelLeft();
+        PanelGauche = new PanelGauche();
 		start.addActionListener(new java.awt.event.ActionListener() {
 	         public void actionPerformed(java.awt.event.ActionEvent evt) {
 	         
@@ -273,7 +254,7 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
          save.addActionListener(new java.awt.event.ActionListener() {
         	 public void actionPerformed(java.awt.event.ActionEvent evt) {
 		            	 try {
-							generateFileOut("Out2");
+							saveInFile("Out2");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -281,21 +262,13 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 		            
 		             }
 		         });
-         prcButton.addActionListener(new java.awt.event.ActionListener() {
-             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	 index--;
-            	 insertDataIntoTable(index);
-            	 
-             }
-         });
-	     
 		
 	}
+	
 	public void openFile() {
-    	File file=new File("doc/index.html");
+    	File file=new File("doc/i.html");
         Path pat=file.toPath();
 		 System.out.println(pat);
-		 
 			Desktop desktop = null;
 			if (Desktop.isDesktopSupported()) {
 				desktop = Desktop.getDesktop();
@@ -307,139 +280,124 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 			}
 		}
 
-	 
-    
-
-	public javax.swing.JTextArea getjTextArea1() {
-		return contenuFichier;
+	
+	public JTextArea getTextArea() {
+		return contenufileSave;
 	}
 
-	public void setjTextArea1(JTextArea contenuFichier) {
-		this.contenuFichier = contenuFichier;
+	public double getSeuil() {
+		return seuil;
+	}
+	
+	public JButton getBouttonStart() {
+		return start;
 	}
 
-	@Override
+	public static TextArea getfilecahine() {
+		return filecahine;
+	}
+	
+	public List<ResultOfItem> getResultItem(){
+		return resultItem;
+	}
+	
+	public List<List<ResultOfItem>> getIterationsResults() {
+		return iterationsResults;
+	}
+	
+	public void setTextArea(JTextArea contenufileSave) {
+		this.contenufileSave = contenufileSave;
+	}
+	
+	public void setBouttonStart(javax.swing.JButton start) {
+		this.start= start;
+	}
+
+	
+
+	public static void setfilecahine(TextArea filecahine) {
+		ViewResult.filecahine = filecahine;
+	} 
+	
 	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
 		seuil=  Double.valueOf(fixedSeuil.getModel().getValue().toString() );
 		 
 	}
 	
 
-	public double getSeuil() {
-		return seuil;
-	}
-
-	public void setSeuil(double seuil) {
-		this.seuil = seuil;
-	}
-
-	public javax.swing.JButton getjButton1() {
-		return start;
-	}
-
-	public void setjButton1(javax.swing.JButton start) {
-		this.start= start;
-	}
-
-	public static TextArea getTextArea1Rer() {
-		return textArea1Rer;
-	}
-
-	public static void setTextArea1Rer(TextArea textArea1Rer) {
-		ViewResult.textArea1Rer = textArea1Rer;
-	} 
-	
-	public List<List<ResultOfItem>> getIterationsResults() {
-		return iterationsResults;
-	}
-
 	public void setIterationsResults(List<List<ResultOfItem>> iterationsResults) {
 		this.iterationsResults = iterationsResults;
 	}
-
-	public void insertDataIntoTable(int index){
 	
-	int j=modelTable.getRowCount();
-	Vector vec=modelTable.getDataVector();
-	vec.clear(); 
-	
-	
-	
-		if(index>=0 && index <iterationsResults.size()){
-		for(ResultOfItem row:iterationsResults.get(index)){
-			row.print();
-			modelTable.addRow(new Object[]{row.getGenerateurs().toString(),row.getFermeture().toString(),String.valueOf(row.getSupport()),row.getRegle(),"1",row.getLift()});
-			
-		}
-		
-		}
-		
-		if(index>0){
-			prcButton.setEnabled(true);
-		}
-		else{
-			prcButton.setEnabled(false);
-		}
-		if(index<iterationsResults.size()-1){
-			//svtButton.setEnabled(true);
-		}
-		else{
-			//svtButton.setEnabled(false);
-		}
+	public void setSeuil(double seuil) {
+		this.seuil = seuil;
 	}
 	
-   public List<ResultOfItem> getItemRows(){
-	   return rows;
-   }
+	public void insertDataInTable(int i){
+		int j=modelTable.getRowCount();
+		Vector vec=modelTable.getDataVector();
+		vec.clear(); 
+			if(i>=0 && i <iterationsResults.size()){
+				for(ResultOfItem row:iterationsResults.get(i)){
+					row.print();
+					modelTable.addRow(new Object[]{row.getGenerateurs().toString(),row.getFermeture().toString(),String.valueOf(row.getSupport()),row.getRegle(),"1",row.getLift()});
+					
+				}
+			
+			}
+
+	}
 	
-	public void generateFileOut(String name) throws IOException{
-		java.io.File fichier = new java.io.File(nameFile.getText()+".txt");
-		if (!fichier.exists()) {
-			fichier.createNewFile();  
+	/** 
+	 * fonction pour la sauvegarde des resultats dans un fichier txt
+	 * @param name: nom du fichier
+	 * */
+	
+	public void saveInFile(String name) throws IOException{
+		java.io.File fileSave = new java.io.File(nameFile.getText()+".txt");
+		if (!fileSave.exists()) {
+			fileSave.createNewFile();  
 		}
 		
 		int k=0;
-	   	String content="******************** Project of FDD ****************\n";
-		       content+="************* The result of Close Algorithm ************";
-		       content+="\n \n \n \n";
+	   	String cahine="----------------- execution de l'algorithme Close -----------------";
+		       cahine+="\n \n \n \n \n \n";
 		       
-		       for(List<ResultOfItem> row:iterationsResults){
-		    	     content+="***************************************************\n";
-		    	   content+="Les resultat de l'iteration "+k+"\n";
-		    	     content+="***************************************************\n";
-		    	     content+="\n";
-		    	   for(ResultOfItem elm:row){
+		       for(List<ResultOfItem> rslt:iterationsResults){
+		    	     cahine+="-----------------------------------------------------\n";
+		    	   cahine+="Les resultat de l'iteration "+k+" : \n \n";
+		    	     cahine+="------------------------------------------------------\n";
+		    	     cahine+="\n";
+		    	   for(ResultOfItem elm:rslt){
 		    		   for(String generator :elm.getGenerateurs()){
-		    			   content+=generator;
+		    			   cahine+=generator;
 		    			}
-		    		  content+="|   ";
-		    		  content+="[  ";
+		    		  cahine+="|   ";
+		    		  cahine+="{  ";
 		    		  for(String str:elm.getFermeture()){
-		    			  content+=str;
-		    			   content+=", ";
+		    			  cahine+=str;
+		    			  cahine+=", ";
 		    				}
-		    		  content+="]"  ;
-		    		  content+="|   ";
+		    		  cahine+="}"  ;
+		    		  cahine+="|   ";
 		    		   
-		    		  content+=elm.getSupport();
-		    		  content+="|   ";
-		    		  content+=elm.getRegle();
-		    		  content+="   |   ";
-		    		  content+="Confiance : 1";
-		    		  content+="|   ";
-		    		  content+="Lift :  "+elm.getLift();
-		    		  content+="\n";
+		    		  cahine+=elm.getSupport();
+		    		  cahine+="|   ";
+		    		  cahine+=elm.getRegle();
+		    		  cahine+="   |   ";
+		    		  cahine+="Confiance = 1";
+		    		  cahine+="|   ";
+		    		  cahine+="Lift =  "+elm.getLift();
+		    		  cahine+="\n";
 		    	   }
 		    	   k++ ;
-		    	   content+="\n \n \n \n";
+		    	   cahine+="\n \n \n \n";
 		       }
-		java.io.FileOutputStream monFluxFichier = new java.io.FileOutputStream(fichier); 
-		byte[] contentInBytes = content.getBytes();
-		 
-		monFluxFichier.write(contentInBytes);
-		monFluxFichier.flush();
-		monFluxFichier.close();
+		java.io.FileOutputStream streameSaveFile = new java.io.FileOutputStream(fileSave); 
+		byte[] byteChaine = cahine.getBytes();
+		streameSaveFile.write(byteChaine);
+		streameSaveFile.flush();
+		streameSaveFile.close();
 		
 	}
 }

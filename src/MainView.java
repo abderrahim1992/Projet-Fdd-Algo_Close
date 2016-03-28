@@ -1,8 +1,7 @@
 
-     
 /**
  * 
- * Authors: Kheireddine Berkane et Amazigh Amrane
+ * Authors: Abderrahim Si ziani et Mohamed Ibrihen
  */
 
 import java.awt.BasicStroke;
@@ -24,10 +23,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
  
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -46,79 +47,59 @@ import javax.swing.table.DefaultTableModel;
 
 public class MainView  implements TreeSelectionListener{
 
+	 	private JFrame frame;
+	    private static   MainView viewSource;
+ 	    private ViewResult resultView;
+ 	    private JSplitPane split;	
 	    
-	    private static   MainView viewGUI;
- 	    private javax.swing.JSplitPane jSplitPaneContainer;
- 	    private ViewResult mainAreaPane;
- 	    private JFrame frame;
-	    
-	    
-	    
-	    /** Creation de la fenetre principale  GUI */
 	    public MainView() {
 	    	frame=new JFrame();
 	    	frame.setTitle("Close Algorithm");
 	    	frame.setSize(1000,700);
-	        initComponents();
-
+	        initView();
 	    }
          
-	    private void initComponents() {
+	    private void initView() {
 	     
 	    	frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-	    	mainAreaPane =new ViewResult();
-	    	
-	    	
-	             
-	             mainAreaPane.getjButton1().addActionListener(new java.awt.event.ActionListener() {
+	    	resultView =new ViewResult();
+	             resultView.getBouttonStart().addActionListener(new java.awt.event.ActionListener() {
 		             public void actionPerformed(java.awt.event.ActionEvent evt) {
-			             System.out.println("je suis la !!!");
-		 	            launchAlgorithm();
+			             
+		 	            execAlgorithm();
 		             }
 		         });
-	             jSplitPaneContainer = new javax.swing.JSplitPane();
-		         jSplitPaneContainer.setDividerLocation(201);
-		         jSplitPaneContainer.setDividerSize(3);
-		         
-		         
-	             //Add navigation area to the container
-		         jSplitPaneContainer.setLeftComponent(null);
-		         
-		         //Add main area to the container
-	             jSplitPaneContainer.setRightComponent(mainAreaPane);
-	             
-	             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(frame.getContentPane());
+	             split = new JSplitPane();
+		         split.setLeftComponent(null);
+	             split.setRightComponent(resultView);
+	             GroupLayout layout = new GroupLayout(frame.getContentPane());
 	             frame.getContentPane().setLayout(layout);
 	             layout.setHorizontalGroup(
-	                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                 .addComponent(jSplitPaneContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
+	                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+	                 .addComponent(split, GroupLayout.DEFAULT_SIZE, 1011, Short.MAX_VALUE)
 	             );
 	             layout.setVerticalGroup(
-	                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                 .addComponent(jSplitPaneContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+	                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+	                 .addComponent(split, GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
 	             );
    
-      
-	       
-	          
+     
 	             frame.pack();
       
 	    }
 	    
-	    public void launchAlgorithm(){
+	    public void execAlgorithm(){
 	    			
-	    			List<ResultOfItem> rows= mainAreaPane.getItemRows();
-			    	Close CLoseAlgo=new Close(rows,this.mainAreaPane.getSeuil());
-			    	CLoseAlgo.launchAlgorithm();
-			    	mainAreaPane.setIterationsResults(CLoseAlgo.getIterationsResults());
-			    	mainAreaPane.insertDataIntoTable(0);
+	    			List<ResultOfItem> results= resultView.getResultItem();
+			    	Close CLoseAlgo=new Close(results,this.resultView.getSeuil());
+			    	CLoseAlgo.executeClose();
+			    	resultView.setIterationsResults(CLoseAlgo.getResultats());
+			    	resultView.insertDataInTable(0);
 	    }
-	    @Override
-	    public void valueChanged(TreeSelectionEvent arg0) {
-	    	// TODO Auto-generated method stub
-	    	
-	    }			    
+	    
+	    
 	    public static void main(String args[])  {
+	    	
 	    	java.awt.EventQueue.invokeLater(new Runnable() {
 	    		public void run() {
 	    			
@@ -130,12 +111,17 @@ public class MainView  implements TreeSelectionListener{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	    			viewGUI= new MainView();
-	    			viewGUI.frame.setVisible(true);
-          
+	    			viewSource= new MainView();
+	    			viewSource.frame.setVisible(true);
 	    		}
 	    	});
 	    }
+
+		@Override
+		public void valueChanged(TreeSelectionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 
 
 }

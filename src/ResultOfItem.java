@@ -2,7 +2,7 @@
 
 /**
  * 
- * Authors: Kheireddine Berkane et Amazigh Amrane
+ * Authors:Abderrahim Si ziani et Mohamed Ibrihen
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -58,16 +58,6 @@ public class ResultOfItem {
 		this.items = items;
 	}
 	
-	
-	public double getLift() {
-		return lift;
-	}
-
-
-	public void setLift(double lift) {
-		this.lift = lift;
-	}
-
 
 	public List<String> getGenerateurs() {
 		return generateurs;
@@ -109,15 +99,24 @@ public class ResultOfItem {
 		this.regle = regle;
 	}
 
+	public double getLift() {
+		return lift;
+	}
+
+
+	public void setLift(double lift) {
+		this.lift = lift;
+	}
+
 
 	public void print(){
-		System.out.println("*********new Generator row***************** " );
-		for(String generator :generateurs){
-		System.out.println(generator);
+		System.out.println("********* NOUVEAU GÉNÉRTEURS***************** " );
+		for(String generateur :generateurs){
+		System.out.println(generateur);
 	}
 		System.out.println("fermetures ");
-		for(String str:fermeture){
-		System.out.println(str);
+		for(String ferme:fermeture){
+		System.out.println(ferme);
 		}
 		System.out.println("support: "+support);
 		System.out.println("regles: "+regle);
