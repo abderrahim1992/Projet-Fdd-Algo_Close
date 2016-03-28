@@ -4,6 +4,7 @@
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -24,6 +25,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -111,11 +113,14 @@ public class ViewResult extends JSplitPane   implements ChangeListener{
 	     contenufileSave.setRows(5);
 	     scorlFilePanel.setViewportView(contenufileSave);
 	     scorllPaneTable.setViewportView(table);
-	  
+	    
          double seuilSupport = 0.0;                                                                  
          SpinnerModel model = new SpinnerNumberModel(seuilSupport, seuilSupport- 0, seuilSupport + 1,0.100000000000000000);    
          model.addChangeListener(this);
-         fixedSeuil = new JSpinner(model); 
+         fixedSeuil = new JSpinner(model);
+         Component mySpinnerEditor = fixedSeuil.getEditor();
+         JFormattedTextField jFormattedTextField = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
+         jFormattedTextField.setColumns(3);
 	         
          table = new JTable();
          table.setSize(WIDTH, 800);
